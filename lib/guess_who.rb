@@ -12,17 +12,18 @@ module GuessWho
       @score = 0
       @used_names = []
       @photo = nil
+      @candidate = name_and_photo
     end
 
     def display_photo
-      name_and_photo_unused = @name_and_photo.reject { |k, _| @used_names.include?(k) }
-      name, @photo = name_and_photo_unused.to_a.sample(1).to_h.flatten
+      name, @photo = @candidate.to_a.sample(1).to_h.flatten
       photos = @photos.sample(8)
       unless photos.include?(@photo)
         photos.shift
         photos << @photo
       end
       @used_names << name
+      update_candidate!
       [name, photos.shuffle]
     end
 
@@ -30,6 +31,10 @@ module GuessWho
       (photo == @photo).tap do |res|
         @score += 100 if res
       end
+    end
+
+    def update_candidate!
+      @candidate = @name_and_photo.reject { |k, _| @used_names.include?(k) }
     end
 
     def score
