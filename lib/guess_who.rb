@@ -8,37 +8,41 @@ module GuessWho
   class Session
     def initialize(name_and_photo)
       @name_and_photo = name_and_photo
-      @photos = @name_and_photo.values
       @score = 0
       @used_names = []
-      @photo = nil
-      @candidate = name_and_photo
+      pick_candate_and_photos!
     end
 
     def display_photo
-      name, @photo = @candidate.to_a.sample(1).to_h.flatten
-      photos = @photos.sample(8)
-      unless photos.include?(@photo)
-        photos.shift
-        photos << @photo
-      end
-      @used_names << name
-      update_candidate!
-      [name, photos.shuffle]
+      [@candidate, @photos]
     end
 
     def submit!(photo)
-      (photo == @photo).tap do |res|
-        @score += 100 if res
-      end
-    end
-
-    def update_candidate!
-      @candidate = @name_and_photo.reject { |k, _| @used_names.include?(k) }
+      success = (photo == @name_and_photo[@candidate])
+      @score += 100 if success
+      @used_names << @candidate
+      pick_candate_and_photos!
+      success
     end
 
     def score
       @score
     end
+
+    private
+
+    def pick_candate_and_photos!
+      @candidate = @name_and_photo.keys.reject { |name| @used_names.include?(name) }.sample(1).first
+      photo = @name_and_photo[@candidate]
+      photos = @name_and_photo.values.sample(8)
+      unless photos.include?(photo)
+        photos.shift
+        photos << photo
+      end
+      @photos = photos.shuffle
+    end
   end
 end
+
+# to do dump / load(class method)
+# sinatra : http://sinatrarb.com/intro.html

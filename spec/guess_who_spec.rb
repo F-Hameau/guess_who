@@ -29,7 +29,10 @@ RSpec.describe GuessWho do
 
   it 'runs a three questions the game' do
     expect(session.display_photo).to eq ['François Hameau', ['/teams/david.png', '/teams/renaud.png', '/teams/francois.png']]
+    expect(session.display_photo).to eq ['François Hameau', ['/teams/david.png', '/teams/renaud.png', '/teams/francois.png']]
     expect(session.submit!('/teams/francois.png')).to eq true
+    expect(session.score).to eq 100
+    expect(session.display_photo).to eq ['Renaud Pestre', ['/teams/francois.png', '/teams/renaud.png', '/teams/david.png']]
     expect(session.score).to eq 100
     expect(session.display_photo).to eq ['Renaud Pestre', ['/teams/francois.png', '/teams/renaud.png', '/teams/david.png']]
     expect(session.submit!('/teams/francois.png')).to eq false
