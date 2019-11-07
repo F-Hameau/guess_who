@@ -1,0 +1,5 @@
+source "https://rubygems.org"
+
+gem 'sinatra'
+gem 'guess_who', path: '../engine'
+gem 'sinatra-contrib'
