@@ -16,10 +16,12 @@ module GuessWho
     end
 
     def display_photo
-      [@candidate, @photos]
+      [@candidate, @photos] unless over?
     end
 
     def submit!(photo)
+      return if over?
+
       success = (photo == @name_and_photo[@candidate])
       @score += 100 if success
       @used_names << @candidate
@@ -29,6 +31,10 @@ module GuessWho
 
     def score
       @score
+    end
+
+    def over?
+      @used_names.length == @photos.length
     end
 
     def dump

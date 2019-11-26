@@ -44,5 +44,7 @@ RSpec.describe GuessWho do
     expect(session.display_photo).to eq ['David Ruyer', ['/teams/francois.png', '/teams/david.png', '/teams/renaud.png']]
     expect(session.submit!('/teams/david.png')).to eq true
     expect(session.score).to eq 200
+    expect(session.over?).to eq true
+    expect(session.display_photo).to eq nil
   end
 end
