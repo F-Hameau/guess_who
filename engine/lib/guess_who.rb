@@ -6,12 +6,13 @@ module GuessWho
   class Error < StandardError; end
   # Launch a game session
   class Session
-    def initialize(name_and_photo, score: 0, used_names: [], photos: nil, candidate: nil)
+    def initialize(name_and_photo, score: 0, used_names: [], rounds: nil, photos: nil, candidate: nil)
       @name_and_photo = name_and_photo
       @score = score
       @used_names = used_names
       @photos = photos
       @candidate = candidate
+      @rounds = [rounds || name_and_photo.length].reject(&:nil?).min
       pick_candate_and_photos! if @photos.nil? && @candidate.nil?
     end
 
@@ -34,21 +35,22 @@ module GuessWho
     end
 
     def over?
-      @used_names.length == @photos.length
+      @used_names.length >= @rounds
     end
 
     def dump
       {
         name_and_photo: @name_and_photo,
         used_names: @used_names,
-        score:  @score,
+        score: @score,
         photos: @photos,
-        candidate: @candidate
+        candidate: @candidate,
+        rounds: @rounds
       }
     end
 
     def self.load(dump)
-      GuessWho::Session.new(dump[:name_and_photo], score: dump[:score], used_names: dump[:used_names], photos: dump[:photos], candidate: dump[:candidate])
+      GuessWho::Session.new(dump[:name_and_photo], score: dump[:score], used_names: dump[:used_names], photos: dump[:photos], candidate: dump[:candidate], rounds: dump[:rounds])
     end
 
     private

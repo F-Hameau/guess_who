@@ -1,18 +1,15 @@
 require 'rubygems'
 require 'bundler'
 require "sinatra/json"
+require "sinatra/cors"
 
 Bundler.require
 
+set :allow_origin, "*"
+set :allow_methods, "GET,HEAD,POST,DELETE"
+set :allow_headers, "content-type,if-modified-since"
 
-NAME_AND_PHOTO = {
-  "Agathe" => "/image/upload/v1573665459/team/Agathe.jpg",
-  "Raphael" => "/image/upload/v1573665459/team/raphael.jpg",
-  "Marine" => "/image/upload/v1573665459/team/Marine.jpg",
-  "Helene" => "/image/upload/v1573665459/team/Helene.jpg",
-  "Matthieu Taverana" => "/image/upload/v1573665459/team/matthieu-taverna.jpg",
-  "Benjamin" => "/image/upload/v1573665459/team/Benjamin.jpg"
-}
+NAME_AND_PHOTO = JSON.parse(File.read('./data/names_and_photos.json'))
 
 class SessionStore
   @sessions = {}
@@ -22,7 +19,7 @@ class SessionStore
     if dump
       GuessWho::Session.load(dump)
     else
-      session = GuessWho::Session.new(NAME_AND_PHOTO)
+      session = GuessWho::Session.new(NAME_AND_PHOTO, rounds: 3)
       put(id, session)
       session
     end
@@ -31,6 +28,10 @@ class SessionStore
   def self.put(id, session)
     dump = session.dump
     @sessions[id] = dump
+  end
+
+  def self.delete(id)
+    @sessions.delete(id)
   end
 
   def self.inspect
@@ -54,9 +55,18 @@ post '/:player' do
   payload = JSON.parse(request.body.read)
   photo = payload["photo"]
   res = session.submit!(photo)
+
+  # if session.over?
+  # push to zapier
+
   SessionStore.put(params['player'], session)
 
   json(
     success: res
   )
+end
+
+delete '/:player' do
+  SessionStore.delete(params['player'])
+  halt 200
 end
