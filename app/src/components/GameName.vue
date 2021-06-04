@@ -70,7 +70,7 @@ export default {
         photo = this.photo;
       }
 
-      const res = await fetch("http://localhost:4567/" + this.player + "/false", {
+      const res = await fetch("https://pretto-whois.netlify.app/" + this.player + "/false", {
         method: "POST",
         body: JSON.stringify({ photo }),
         headers: {
@@ -91,14 +91,14 @@ export default {
       await this.reload();
     },
     async reload() {
-      const res = await fetch("http://localhost:4567/" + this.player + "/false");
+      const res = await fetch("https://pretto-whois.netlify.app/" + this.player + "/false");
       const session = await res.json();
       this.session = session;
       this.photo = session.answerPhoto;
       this.name = null;
     },
     async restart() {
-      await fetch("http://localhost:4567/" + this.player, {
+      await fetch("https://pretto-whois.netlify.app/" + this.player, {
         method: "DELETE"
       });
       await this.reload();

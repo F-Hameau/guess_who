@@ -5,8 +5,8 @@ module LoadData
 
   BASE_URL = "https://api.airtable.com/v0/"
   HEADERS = { "Content-Type" => "application/json" }
-  APIKEY = 'keyIt42u5JfmBrL65'
-  Id = 'app8Aiccws4UMcgsd/GuessWho'
+  APIKEY = env["AIRTABLE_APIKEY"]
+  Id = env["AIRTABLE_Id"]
 
   class << self
     def get
