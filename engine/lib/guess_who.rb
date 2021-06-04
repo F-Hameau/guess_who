@@ -20,6 +20,12 @@ module GuessWho
       [@candidate, @photos] unless over?
     end
 
+    def answer_photo
+      return if over?
+
+      @name_and_photo[@candidate]
+    end
+
     def submit!(photo)
       return if over?
 
@@ -65,6 +71,7 @@ module GuessWho
       end
       @photos = photos.shuffle
     end
+
   end
 end
 
