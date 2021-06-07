@@ -70,7 +70,7 @@ export default {
         photo = this.photo;
       }
 
-      const res = await fetch("https://prettoguesswho.herokuapp.com/" + this.player + "/false", {
+      const res = await fetch("https://guesswhopretto.herokuapp.com/" + this.player + "/false", {
         method: "POST",
         body: JSON.stringify({ photo }),
         headers: {
@@ -91,14 +91,14 @@ export default {
       await this.reload();
     },
     async reload() {
-      const res = await fetch("https://prettoguesswho.herokuapp.com/" + this.player + "/false");
+      const res = await fetch("https://guesswhopretto.herokuapp.com/" + this.player + "/false");
       const session = await res.json();
       this.session = session;
       this.photo = session.answerPhoto;
       this.name = null;
     },
     async restart() {
-      await fetch("https://prettoguesswho.herokuapp.com/" + this.player, {
+      await fetch("https://guesswhopretto.herokuapp.com/" + this.player, {
         method: "DELETE"
       });
       await this.reload();

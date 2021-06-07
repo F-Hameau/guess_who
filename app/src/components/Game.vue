@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     async pick(photo) {
-      const res = await fetch("https://prettoguesswho.herokuapp.com/" + this.player + "/"+ this.rounds, {
+      const res = await fetch("https://guesswhopretto.herokuapp.com/" + this.player + "/"+ this.rounds, {
         method: "POST",
         body: JSON.stringify({ photo }),
         headers: {
@@ -73,12 +73,12 @@ export default {
      await this.reload();
     },
     async reload() {
-      const res = await fetch("https://prettoguesswho.herokuapp.com/" + this.player + "/"+ this.rounds);
+      const res = await fetch("https://guesswhopretto.herokuapp.com/" + this.player + "/"+ this.rounds);
       const session = await res.json();
       this.session = session;
     },
     async restart() {
-      await fetch("https://prettoguesswho.herokuapp.com/" + this.player, {
+      await fetch("https://guesswhopretto.herokuapp.com/" + this.player, {
         method: "DELETE"
       });
       await this.reload();
